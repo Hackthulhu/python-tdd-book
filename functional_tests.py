@@ -36,22 +36,28 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element_by_id("id_list_table")
+        table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == "1: Align the conjuntion of the spheres" for row in rows),
-            "New To-Do list item did not appear in table"
-            )
+        self.assertIn('1: Align the conjunction of the spheres', [row.text for row in rows])
 
         # There is still a text box inviting him to add another item he enters
         # "Prepare the Ochre for the ritual of invocation"
-        self.fail("Finish the Test")
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Prepare the Ochre for the ritual of invocation')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+
         # The page updates again and the first two tasks appear on his list.
 
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Align the conjunction of the spheres', [row.text for row in rows])
+        self.assertIn('2: Prepare the Ochre for the ritual of invocation', [row.text for row in rows])
         # Worried about this arcane formula being destroyed into the ether, Fizzywig
         # is releved to find the site has created a unique URL for him (explanitory
         # text to this effect is what catches his eye)
-
+        self.fail('Finish the Test')
 
         # he visits the URL his to-do list is still there
 
