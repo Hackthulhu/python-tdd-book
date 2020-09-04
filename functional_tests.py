@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -14,7 +16,7 @@ class NewVisitorTest(unittest.TestCase):
 
         #he notives the page titl and header mention to-do lists
         self.assertIn('To-Do',  self.browser.title)
-        header_text = self.browser.find_element_by_tag_name('h1').header_text
+        header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
 
 
@@ -26,19 +28,20 @@ class NewVisitorTest(unittest.TestCase):
             )
 
         #he types "Align the conjuntion of the spheres" into a text-box
-        inputbox.sendKeys('Align the conjunction of the spheres')
+        inputbox.send_keys('Align the conjunction of the spheres')
 
 
         # When he hits enter the page updates and now has 1: Align the conjuntion of
         # spheres" as an item in the to-do lists
-        inputbox.sendKeys(Keys.ENTER)
+        inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
         table = self.browser.find_element_by_id("id_list_table")
         rows = table.find_elements_by_tag_name('tr')
         self.assertTrue(
-            any(row.text == "1: Align the conjuntion of the spheres" for row in rows)
-        )
+            any(row.text == "1: Align the conjuntion of the spheres" for row in rows),
+            "New To-Do list item did not appear in table"
+            )
 
         # There is still a text box inviting him to add another item he enters
         # "Prepare the Ochre for the ritual of invocation"
