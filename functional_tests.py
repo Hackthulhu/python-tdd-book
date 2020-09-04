@@ -9,6 +9,12 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
+
     def test_can_start_a_list_and_retreve_it_later(self):
         # Fizzywig, The Powerful Wizard, has heard of a new online to-do app that will
         # help him keep track of his worlds, he goes to the homepage
@@ -36,9 +42,7 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Align the conjunction of the spheres', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Align the conjunction of the spheres')
 
         # There is still a text box inviting him to add another item he enters
         # "Prepare the Ochre for the ritual of invocation"
@@ -47,13 +51,10 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-
         # The page updates again and the first two tasks appear on his list.
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Align the conjunction of the spheres', [row.text for row in rows])
-        self.assertIn('2: Prepare the Ochre for the ritual of invocation', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Align the conjunction of the spheres')
+        self.check_for_row_in_list_table('2: Prepare the Ochre for the ritual of invocation')
         # Worried about this arcane formula being destroyed into the ether, Fizzywig
         # is releved to find the site has created a unique URL for him (explanitory
         # text to this effect is what catches his eye)
