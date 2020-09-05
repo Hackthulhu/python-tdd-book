@@ -1,9 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
-import unittest
 
-class NewVisitorTest(unittest.TestCase):
+
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
     def tearDown(self):
@@ -18,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retreve_it_later(self):
         # Fizzywig, The Powerful Wizard, has heard of a new online to-do app that will
         # help him keep track of his worlds, he goes to the homepage
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         #he notives the page titl and header mention to-do lists
         self.assertIn('To-Do',  self.browser.title)
@@ -63,6 +64,3 @@ class NewVisitorTest(unittest.TestCase):
         # he visits the URL his to-do list is still there
 
         # Satisfied, he returns to his slumbatorium
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
